@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/tailwind.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-light-green min-h-screen flex flex-col">
+  <!-- Top Navigation -->
+  <nav class="bg-white shadow-md py-4 px-6 animate-slide-down">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <button id="sidebar-toggle" class="text-gray-700 hover:text-dark-green mr-5">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-2xl font-bold text-dark-green animate-fade-in">Portfolio Admin</h1>
+      </div>
+      
+      <div class="flex items-center space-x-6">
+        <div class="relative">
+          <button class="text-gray-700 hover:text-dark-green">
+            <i class="fas fa-bell text-xl relative">
+              <span class="absolute -top-1 -right-1 w-4 h-4 bg-dark-green rounded-full flex items-center justify-center text-white text-xs animate-pulse-slow"><%= analytics.contactRequests %></span>
+            </i>
+          </button>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+          <div class="avatar-container w-10 h-10">
+            <img src="<%= userData.profileImage || '/api/placeholder/100/100' %>" alt="Admin Profile" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <span class="font-medium"><%= userData.name || 'Admin User' %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex flex-grow">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-white shadow-lg h-screen sticky top-0 pt-6 animate-slide-in-left overflow-y-auto">
+      <div class="px-6 mb-8">
+        <div class="bg-medium-green bg-opacity-20 p-4 rounded-lg text-center">
+          <div class="avatar-container w-20 h-20 mx-auto mb-3">
+            <img src="<%= userData.profileImage || '/api/placeholder/100/100' %>" alt="Admin Profile" class="w-full h-full object-cover">
+          </div>
+          <h3 class="font-medium text-gray-800"><%= userData.name || 'Admin User' %></h3>
+          <p class="text-sm text-gray-600"><%= userData.professionalTitle || 'Administrator' %></p>
+        </div>
+      </div>
+      
+      <div class="space-y-1 px-3">
+        <a href="#dashboard" class="sidebar-link active flex items-center px-4 py-3 rounded-lg transition-all">
+          <i class="fas fa-tachometer-alt w-6 text-lg"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#projects" class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all">
+          <i class="fas fa-briefcase w-6 text-lg"></i>
+          <span>Projects</span>
+        </a>
+        <a href="#experience" class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all">
+          <i class="fas fa-suitcase w-6 text-lg"></i>
+          <span>Experience</span>
+        </a>
+        <a href="#messages" class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all">
+          <i class="fas fa-envelope w-6 text-lg"></i>
+          <span>Messages</span>
+        </a>
+        <a href="#profile" class="sidebar-link flex items-center px-4 py-3 rounded-lg transition-all">
+          <i class="fas fa-user w-6 text-lg"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+
+      <div class="px-3 mt-8">
+        <a href="#logout" class="flex items-center px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg transition-all">
+          <i class="fas fa-sign-out-alt w-6 text-lg"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-grow p-6 overflow-y-auto">
+      <!-- Background Circles -->
+      <div class="circle-bg absolute top-32 right-20 w-64 h-64 animate-pulse-slow"></div>
+      <div class="circle-bg absolute bottom-32 left-20 w-48 h-48 animate-float-slow"></div>
+      
+      <!-- Dashboard Section -->
+      <div id="dashboard" class="mb-10 animate-fade-in">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+            <i class="fas fa-tachometer-alt mr-3 text-dark-green"></i>
+            Dashboard
+          </h2>
+          
+          <div>
+            <button class="admin-btn bg-dark-green text-white px-4 py-2 rounded-lg flex items-center">
+              <i class="fas fa-eye mr-2"></i>
+              View Portfolio
+            </button>
+          </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up" style="animation-delay: 0.1s">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm mb-1">Profile Views</p>
+                <h3 class="text-2xl font-bold">15,842</h3>
+                <p class="text-green-500 text-sm mt-2">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  12% This Week
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+                <i class="fas fa-users text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up" style="animation-delay: 0.2s">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm mb-1">Project Count</p>
+                <h3 class="text-2xl font-bold"><%= analytics.projectsCompleted %></h3>
+                <p class="text-green-500 text-sm mt-2">
+                  <i class="fas fa-plus mr-1"></i>
+                  3 New This Month
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+                <i class="fas fa-briefcase text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up" style="animation-delay: 0.3s">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm mb-1">Happy Clients</p>
+                <h3 class="text-2xl font-bold"><%= analytics.happyClients %></h3>
+                <p class="text-green-500 text-sm mt-2">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  5% This Month
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+                <i class="fas fa-smile-beam text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up" style="animation-delay: 0.4s">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm mb-1">Contact Requests</p>
+                <h3 class="text-2xl font-bold"><%= analytics.contactRequests %></h3>
+                <p class="text-red-500 text-sm mt-2">
+                  <i class="fas fa-exclamation-circle mr-1"></i>
+                  5 Unread
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+                <i class="fas fa-envelope text-xl"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quick Access -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-10 animate-slide-up" style="animation-delay: 0.5s">
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-bolt text-dark-green mr-2"></i>
+            Quick Actions
+          </h3>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="#addProject" class="admin-card bg-light-green p-4 rounded-lg text-center">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-plus"></i>
+              </div>
+              <span class="font-medium text-gray-800">Add Project</span>
+            </a>
+            
+            <a href="#updateProfile" class="admin-card bg-light-green p-4 rounded-lg text-center">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-user-edit"></i>
+              </div>
+              <span class="font-medium text-gray-800">Update Profile</span>
+            </a>
+            
+            <button type="button" class="admin-card bg-light-green p-4 rounded-lg text-center w-full cursor-pointer">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <span class="font-medium text-gray-800">Experience</span>
+            </button>
+            
+            <a href="#analytics" class="admin-card bg-light-green p-4 rounded-lg text-center">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <span class="font-medium text-gray-800">Analytics</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Recent Projects -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-10 animate-slide-up" style="animation-delay: 0.6s">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-briefcase text-dark-green mr-2"></i>
+              Recent Projects
+            </h3>
+            
+            <a href="#allProjects" class="text-dark-green hover:underline">
+              View All
+            </a>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b-2 border-gray-100">
+                  <th class="text-left py-3 px-2">Project</th>
+                  <th class="text-left py-3 px-2">Client</th>
+                  <th class="text-left py-3 px-2">Status</th>
+                  <th class="text-left py-3 px-2">Date</th>
+                  <th class="text-left py-3 px-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% projects.forEach(project => { %>
+                  <tr class="table-row border-b border-gray-50">
+                    <td class="py-3 px-2">
+                      <div class="flex items-center">
+                        <div class="w-10 h-10 rounded bg-light-green flex items-center justify-center text-dark-green mr-3">
+                          <i class="fas fa-<%= project.category === 'web' ? 'globe' : project.category === 'app' ? 'mobile-alt' : project.category === 'ui' ? 'paint-brush' : 'cog' %>"></i>
+                        </div>
+                        <span><%= project.title %></span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-2"><%= project.client || 'N/A' %></td>
+                    <td class="py-3 px-2">
+                      <span class="inline-flex items-center">
+                        <span class="status-dot <%= project.featured ? 'active' : 'draft' %>"></span>
+                        <%= project.featured ? 'Active' : 'In Progress' %>
+                      </span>
+                    </td>
+                    <td class="py-3 px-2"><%= project.projectDate.toLocaleDateString() %></td>
+                    <td class="py-3 px-2">
+                      <div class="flex space-x-2">
+                        <button class="text-blue-500 hover:text-blue-700" data-project-id="<%= project._id %>">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-500 hover:text-red-700" data-project-id="<%= project._id %>">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Modal -->
+      <div id="updateProfileModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl animate-scale-in">
+          <div class="flex items-center justify-between p-6 border-b">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-user-edit text-dark-green mr-3"></i>
+              Update Profile
+            </h3>
+            <button id="closeProfileModal" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[70vh]">
+            <form id="profileForm">
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-id-card text-dark-green mr-2"></i>
+                  Basic Information
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" name="name" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.name %>" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Professional Title</label>
+                    <input type="text" name="professionalTitle" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.professionalTitle %>" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" name="email" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.email %>" required>
+                  </div>
+                  
+                  <div class="flex items-end">
+                    <div class="w-full">
+                      <label class="block text-gray-700 mb-2">Profile Image</label>
+                      <div class="flex items-center">
+                        <input type="file" id="profileImage" name="profileImage" class="hidden" accept="image/*">
+                        <button type="button" onclick="document.getElementById('profileImage').click()" class="admin-btn bg-light-green text-dark-green px-4 py-2 rounded-lg mr-3">
+                          <i class="fas fa-upload mr-2"></i>
+                          Upload
+                        </button>
+                        <span id="fileName" class="text-sm text-gray-500">No file selected</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-align-left text-dark-green mr-2"></i>
+                  Biography
+                </h4>
+                <textarea name="bio" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all h-32" required><%= userData.bio %></textarea>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-tools text-dark-green mr-2"></i>
+                  Skills
+                </h4>
+                
+                <div id="skillsContainer">
+                  <% userData.skills.forEach((skill, index) => { %>
+                    <div class="flex items-center mb-2 skill-item" data-id="<%= index %>">
+                      <span class="skill-badge bg-light-green text-dark-green px-4 py-2 rounded-full font-medium mr-3">
+                        <%= skill.name %> (<%= skill.proficiency %>/10)
+                      </span>
+                      <input type="hidden" name="skills[<%= index %>][name]" value="<%= skill.name %>">
+                      <input type="hidden" name="skills[<%= index %>][proficiency]" value="<%= skill.proficiency %>">
+                      <button type="button" class="text-red-500 hover:text-red-700 remove-skill">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  <% }) %>
+                </div>
+                
+                <div class="flex justify-between items-center mt-4">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Add New Skill</label>
+                    <div class="flex">
+                      <input type="text" id="newSkillName" class="form-input w-48 px-4 py-2 border rounded-l-lg focus:outline-none transition-all" placeholder="Skill name">
+                      <select id="newSkillProficiency" class="form-input w-32 px-4 py-2 border-t border-b border-r focus:outline-none transition-all">
+                        <option value="5">Proficiency (5/10)</option>
+                        <option value="1">1 - Basic</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5 - Intermediate</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10 - Expert</option>
+                      </select>
+                      <button type="button" id="addSkillBtn" class="admin-btn bg-dark-green text-white px-4 py-2 rounded-r-lg">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-share-alt text-dark-green mr-2"></i>
+                  Social Links
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-linkedin text-blue-600 mr-2"></i>
+                      LinkedIn
+                    </label>
+                    <input type="url" name="socialLinks.linkedin" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.linkedin || '' %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-github text-gray-800 mr-2"></i>
+                      GitHub
+                    </label>
+                    <input type="url" name="socialLinks.github" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.github || '' %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-twitter text-blue-400 mr-2"></i>
+                      Twitter
+                    </label>
+                    <input type="url" name="socialLinks.twitter" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.twitter || '' %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-instagram text-pink-600 mr-2"></i>
+                      Instagram
+                    </label>
+                    <input type="url" name="socialLinks.instagram" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.instagram || '' %>">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-chart-bar text-dark-green mr-2"></i>
+                  Portfolio Stats
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Projects Completed</label>
+                    <input type="number" name="stats.projectsCompleted" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.projectsCompleted %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Happy Clients</label>
+                    <input type="number" name="stats.happyClients" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.happyClients %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Years Experience</label>
+                    <input type="number" name="stats.yearsExperience" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.yearsExperience %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Awards Received</label>
+                    <input type="number" name="stats.awardsReceived" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.awardsReceived %>">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-calendar-check text-dark-green mr-2"></i>
+                  Availability
+                </h4>
+                
+                <div class="flex items-center">
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" name="availableForFreelance" class="form-checkbox h-5 w-5 text-dark-green rounded focus:ring-dark-green" <%= userData.availableForFreelance ? 'checked' : '' %>>
+                    <span class="ml-2 text-gray-700">Available for freelance work</span>
+                  </label>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex justify-end p-6 border-t">
+            <button type="button" id="cancelProfileUpdate" class="admin-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg mr-3">
+              Cancel
+            </button>
+            <button type="button" id="saveProfileChanges" class="admin-btn bg-dark-green text-white px-6 py-2 rounded-lg">
+              <i class="fas fa-save mr-2"></i>
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Modal -->
+      <div id="addProjectModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl animate-scale-in">
+          <div class="flex items-center justify-between p-6 border-b">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-briefcase text-dark-green mr-3"></i>
+              Add New Project
+            </h3>
+            <button id="closeProjectModal" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[70vh]">
+            <form id="projectForm">
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-info-circle text-dark-green mr-2"></i>
+                  Project Information
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Project Title *</label>
+                    <input type="text" name="title" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="E-commerce Website" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Category *</label>
+                    <select name="category" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" required>
+                      <option value="web">Web Development</option>
+                      <option value="ui">UI/UX Design</option>
+                      <option value="app">Mobile App</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Client Name</label>
+                    <input type="text" name="client" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Client or Company Name">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Project Date</label>
+                    <input type="date" name="projectDate" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-align-left text-dark-green mr-2"></i>
+                  Description
+                </h4>
+                
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2">Short Description (max 150 chars) *</label>
+                  <input type="text" name="shortDescription" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Brief overview of the project" maxlength="150" required>
+                  <div class="text-sm text-gray-500 mt-1">
+                    <span id="shortDescCounter">0</span>/150 characters
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 mb-2">Full Description *</label>
+                  <textarea name="description" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all h-32" placeholder="Detailed description of the project, including goals, challenges, and solutions..." required></textarea>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-images text-dark-green mr-2"></i>
+                  Project Images
+                </h4>
+                
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2">Featured Image *</label>
+                  <div class="flex items-center">
+                    <input type="file" id="featuredImage" name="featuredImage" class="hidden" accept="image/*" required>
+                    <button type="button" onclick="document.getElementById('featuredImage').click()" class="admin-btn bg-light-green text-dark-green px-4 py-2 rounded-lg mr-3">
+                      <i class="fas fa-upload mr-2"></i>
+                      Upload
+                    </button>
+                    <span id="featuredImageName" class="text-sm text-gray-500">No file selected</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 mb-2">Additional Images</label>
+                  <div class="flex items-center">
+                    <input type="file" id="additionalImages" name="additionalImages" class="hidden" accept="image/*" multiple>
+                    <button type="button" onclick="document.getElementById('additionalImages').click()" class="admin-btn bg-light-green text-dark-green px-4 py-2 rounded-lg mr-3">
+                      <i class="fas fa-upload mr-2"></i>
+                      Upload Multiple
+                    </button>
+                    <span id="additionalImagesCount" class="text-sm text-gray-500">No files selected</span>
+                  </div>
+                  
+                  <div id="additionalImagesPreview" class="flex flex-wrap gap-2 mt-3"></div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-code text-dark-green mr-2"></i>
+                  Technologies Used
+                </h4>
+                
+                <div id="technologiesContainer" class="flex flex-wrap gap-2 mb-3"></div>
+                
+                <div class="flex">
+                  <input type="text" id="newTechnology" class="form-input w-full px-4 py-2 border rounded-l-lg focus:outline-none transition-all" placeholder="Add technology (e.g., React, Node.js, Figma)">
+                  <button type="button" id="addTechnologyBtn" class="admin-btn bg-dark-green text-white px-4 py-2 rounded-r-lg">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-link text-dark-green mr-2"></i>
+                  Project Links
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Project URL</label>
+                    <input type="url" name="projectUrl" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="https://example.com">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">GitHub URL</label>
+                    <input type="url" name="githubUrl" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="https://github.com/username/repo">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-cog text-dark-green mr-2"></i>
+                  Project Settings
+                </h4>
+                
+                <div class="flex flex-col gap-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" id="featured" name="featured" class="form-checkbox h-5 w-5 text-dark-green rounded focus:ring-dark-green">
+                    <label for="featured" class="ml-2 text-gray-700">Featured project (appears in highlighted sections)</label>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Display Order (lower numbers appear first)</label>
+                    <input type="number" name="order" class="form-input w-32 px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="0" min="0" value="0">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex justify-end p-6 border-t">
+            <button type="button" id="cancelProjectAdd" class="admin-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg mr-3">
+              Cancel
+            </button>
+            <button type="button" id="saveProject" class="admin-btn bg-dark-green text-white px-6 py-2 rounded-lg">
+              <i class="fas fa-save mr-2"></i>
+              Save Project
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience Modal -->
+      <div id="addExperienceModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl animate-scale-in">
+          <div class="flex items-center justify-between p-6 border-b">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-briefcase text-dark-green mr-3"></i>
+              Add Experience
+            </h3>
+            <button id="closeExperienceModal" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[70vh]">
+            <form id="experienceForm">
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-id-card text-dark-green mr-2"></i>
+                  Job Details
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Position</label>
+                    <input type="text" name="position" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Senior Web Developer" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Company</label>
+                    <input type="text" name="company" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Acme Inc." required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Location</label>
+                    <input type="text" name="location" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="New York, NY">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Display Order</label>
+                    <input type="number" name="order" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="1" min="0" value="0">
+                    <p class="text-xs text-gray-500 mt-1">Lower numbers appear first</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-calendar-alt text-dark-green mr-2"></i>
+                  Time Period
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Start Date</label>
+                    <input type="date" name="startDate" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" required>
+                  </div>
+                  
+                  <div id="endDateContainer">
+                    <label class="block text-gray-700 mb-2">End Date</label>
+                    <input type="date" name="endDate" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all">
+                  </div>
+                </div>
+                
+                <div class="flex items-center">
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" name="current" id="currentPosition" class="form-checkbox h-5 w-5 text-dark-green rounded focus:ring-dark-green">
+                    <span class="ml-2 text-gray-700">I currently work here</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-align-left text-dark-green mr-2"></i>
+                  Job Description
+                </h4>
+                <textarea name="description" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all h-32" placeholder="Describe your responsibilities and achievements..." required></textarea>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-tools text-dark-green mr-2"></i>
+                  Skills Used
+                </h4>
+                
+                <div id="experienceSkillsContainer" class="flex flex-wrap gap-2 mb-4"></div>
+                
+                <div class="flex items-end">
+                  <div class="w-full">
+                    <label class="block text-gray-700 mb-2">Add Skill</label>
+                    <div class="flex">
+                      <input type="text" id="newExperienceSkill" class="form-input w-full px-4 py-2 border rounded-l-lg focus:outline-none transition-all" placeholder="e.g. JavaScript, React, Node.js">
+                      <button type="button" id="addExperienceSkillBtn" class="admin-btn bg-dark-green text-white px-4 py-2 rounded-r-lg">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex justify-end p-6 border-t">
+            <button type="button" id="cancelExperienceAdd" class="admin-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg mr-3">
+              Cancel
+            </button>
+            <button type="button" id="saveExperience" class="admin-btn bg-dark-green text-white px-6 py-2 rounded-lg">
+              <i class="fas fa-save mr-2"></i>
+              Save Experience
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

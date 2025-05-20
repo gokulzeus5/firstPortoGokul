@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio Admin Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "light-green": "#E6F7E9",
+              "medium-green": "#A5D6A7",
+              "dark-green": "#75C278",
+            },
+            animation: {
+              "fade-in": "fadeIn 1s ease-in-out",
+              "slide-up": "slideUp 0.7s ease-out",
+              "slide-down": "slideDown 0.7s ease-out",
+              "slide-in-right": "slideInRight 0.7s ease-out",
+              "slide-in-left": "slideInLeft 0.7s ease-out",
+              "bounce-slow": "bounce 3s infinite",
+              "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              float: "float 5s ease-in-out infinite",
+              "float-slow": "float 8s ease-in-out infinite",
+              typing:
+                "typing 3.5s steps(40, end), blink .75s step-end infinite",
+              "scale-in": "scaleIn 0.5s ease-out",
+              "rotate-in": "rotateIn 0.7s ease-out",
+              wave: "wave 2.5s ease-in-out infinite",
+              shimmer: "shimmer 2s infinite linear",
+              "bounce-in": "bounceIn 0.7s ease-out",
+              "spin-slow": "spin 8s linear infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(50px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              slideDown: {
+                "0%": { transform: "translateY(-50px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              slideInRight: {
+                "0%": { transform: "translateX(50px)", opacity: "0" },
+                "100%": { transform: "translateX(0)", opacity: "1" },
+              },
+              slideInLeft: {
+                "0%": { transform: "translateX(-50px)", opacity: "0" },
+                "100%": { transform: "translateX(0)", opacity: "1" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+              typing: {
+                "0%": { width: "0" },
+                "100%": { width: "100%" },
+              },
+              blink: {
+                "from, to": { borderColor: "transparent" },
+                "50%": { borderColor: "#75C278" },
+              },
+              scaleIn: {
+                "0%": { transform: "scale(0)", opacity: "0" },
+                "80%": { transform: "scale(1.1)" },
+                "100%": { transform: "scale(1)", opacity: "1" },
+              },
+              rotateIn: {
+                "0%": { transform: "rotate(-90deg)", opacity: "0" },
+                "100%": { transform: "rotate(0)", opacity: "1" },
+              },
+              wave: {
+                "0%": { transform: "rotate(0deg)" },
+                "10%": { transform: "rotate(14deg)" },
+                "20%": { transform: "rotate(-8deg)" },
+                "30%": { transform: "rotate(14deg)" },
+                "40%": { transform: "rotate(-4deg)" },
+                "50%": { transform: "rotate(10deg)" },
+                "60%": { transform: "rotate(0deg)" },
+                "100%": { transform: "rotate(0deg)" },
+              },
+              shimmer: {
+                "0%": { backgroundPosition: "-200% 0" },
+                "100%": { backgroundPosition: "200% 0" },
+              },
+              bounceIn: {
+                "0%": { transform: "scale(0.3)", opacity: "0" },
+                "50%": { transform: "scale(1.05)" },
+                "70%": { transform: "scale(0.9)" },
+                "100%": { transform: "scale(1)", opacity: "1" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      .bg-gradient {
+        background: linear-gradient(120deg, #e6f7e9, #a5d6a7, #e6f7e9);
+        background-size: 200% 200%;
+        animation: gradientBG 15s ease infinite;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Sidebar active link */
+      .sidebar-link.active {
+        background-color: #75C278;
+        color: white;
+      }
+
+      .sidebar-link:hover:not(.active) {
+        background-color: #E6F7E9;
+      }
+
+      /* Card animation */
+      .admin-card {
+        transition: all 0.3s ease;
+      }
+
+      .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Input focus animation */
+      .form-input:focus {
+        box-shadow: 0 0 0 3px rgba(117, 194, 120, 0.3);
+        border-color: #75C278;
+      }
+
+      /* Button animation */
+      .admin-btn {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .admin-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.4s;
+        z-index: 1;
+      }
+
+      .admin-btn:hover::before {
+        left: 100%;
+      }
+
+      .admin-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Status indicator */
+      .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+      }
+
+      .status-dot.active {
+        background-color: #75C278;
+        animation: pulse 2s infinite;
+      }
+
+      .status-dot.draft {
+        background-color: #FFC107;
+      }
+
+      .status-dot.inactive {
+        background-color: #F44336;
+      }
+
+      /* Table row hover effect */
+      .table-row {
+        transition: all 0.2s ease;
+      }
+
+      .table-row:hover {
+        background-color: #E6F7E9;
+      }
+      
+      /* Circle background accent */
+      .circle-bg {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(117, 194, 120, 0.1);
+        z-index: -1;
+      }
+
+      /* Avatar styling */
+      .avatar-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .avatar-container::after {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: 50%;
+        border: 2px solid #75c278;
+        opacity: 0.7;
+        animation: pulse 2s infinite;
+      }
+
+      /* Skill badge animation */
+      .skill-badge {
+        transition: all 0.3s ease;
+      }
+
+      .skill-badge:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .shimmer {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.8) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite linear;
+      }
+    </style>
+  </head>
+ <body class="bg-light-green min-h-screen flex flex-col">
+  <!-- Top Navigation -->
+  <nav class="bg-white shadow-md py-4 px-6 animate-slide-down">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <button id="sidebar-toggle" class="text-gray-700 hover:text-dark-green mr-5">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+        <h1 class="text-2xl font-bold text-dark-green animate-fade-in">Portfolio Admin</h1>
+      </div>
+      
+      <div class="flex items-center space-x-6">
+        <div class="relative">
+          <button class="text-gray-700 hover:text-dark-green">
+            <i class="fas fa-bell text-xl relative">
+              <span class="absolute -top-1 -right-1 w-4 h-4 bg-dark-green rounded-full flex items-center justify-center text-white text-xs animate-pulse-slow"><%= analytics.contactRequests %></span>
+            </i>
+          </button>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+          <div class="avatar-container w-10 h-10">
+            <img src="<%= userData.profileImage || '/api/placeholder/100/100' %>" alt="Admin Profile" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <span class="font-medium"><%= userData.name || 'Admin User' %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="flex flex-grow">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-white shadow-lg h-screen sticky top-0 pt-6 animate-slide-in-left overflow-y-auto">
+      <div class="px-6 mb-8">
+        <div class="bg-medium-green bg-opacity-20 p-4 rounded-lg text-center">
+          <div class="avatar-container w-20 h-20 mx-auto mb-3">
+            <img src="<%= userData.profileImage || '/api/placeholder/100/100' %>" alt="Admin Profile" class="w-full h-full object-cover">
+          </div>
+          <h3 class="font-medium text-gray-800"><%= userData.name || 'Admin User' %></h3>
+          <p class="text-sm text-gray-600"><%= userData.professionalTitle || 'Administrator' %></p>
+        </div>
+      </div>
+      
+      <div class="space-y-1 px-3">
+        <a href="#dashboard" class="sidebar-link active flex items-center px-4 py-3 rounded-lg transition-all">
+          <i class="fas fa-tachometer-alt w-6 text-lg"></i>
+          <span>Dashboard</span>
+        </a>
+      
+
+      <div class="px-3 mt-8">
+  <a href="#" id="logoutBtn" class="flex items-center px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg transition-all">
+    <i class="fas fa-sign-out-alt w-6 text-lg"></i>
+    <span>Logout</span>
+  </a>
+</div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-grow p-6 overflow-y-auto">
+      <!-- Background Circles -->
+      <div class="circle-bg absolute top-32 right-20 w-64 h-64 animate-pulse-slow"></div>
+      <div class="circle-bg absolute bottom-32 left-20 w-48 h-48 animate-float-slow"></div>
+      
+      <!-- Dashboard Section -->
+      <div id="dashboard" class="mb-10 animate-fade-in">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-3xl font-bold text-gray-800 flex items-center">
+            <i class="fas fa-tachometer-alt mr-3 text-dark-green"></i>
+            Dashboard
+          </h2>
+          
+          <div>
+  <a href="/" class="admin-btn bg-dark-green text-white px-4 py-2 rounded-lg flex items-center">
+    <i class="fas fa-eye mr-2"></i>
+    View Portfolio
+  </a>
+</div>
+
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up" style="animation-delay: 0.1s">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm mb-1">Profile Views</p>
+                <h3 class="text-2xl font-bold">15,842</h3>
+                <p class="text-green-500 text-sm mt-2">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  12% This Week
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+                <i class="fas fa-users text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up" style="animation-delay: 0.2s">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm mb-1">Project Count</p>
+                <h3 class="text-2xl font-bold"><%= analytics.projectsCompleted %></h3>
+                <p class="text-green-500 text-sm mt-2">
+                  <i class="fas fa-plus mr-1"></i>
+                  3 New This Month
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+                <i class="fas fa-briefcase text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+          <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up" style="animation-delay: 0.3s">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm mb-1">Happy Clients</p>
+                <h3 class="text-2xl font-bold"><%= analytics.happyClients %></h3>
+                <p class="text-green-500 text-sm mt-2">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  5% This Month
+                </p>
+              </div>
+              <div class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+                <i class="fas fa-smile-beam text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+      
+   <!-- Messages Card (Click to open modal and fetch messages) -->
+    <div class="admin-card bg-white p-6 rounded-xl shadow-md animate-slide-up cursor-pointer" style="animation-delay: 0.4s" onclick="openMessagesModal()">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm mb-1">Contact Requests</p>
+                <h3 class="text-2xl font-bold" id="contactRequestsCount">0</h3>
+                <p class="text-red-500 text-sm mt-2">
+                    <i class="fas fa-exclamation-circle mr-1"></i>
+                    <span id="unreadCount">0</span> Unread
+                </p>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-800">
+                <i class="fas fa-envelope text-xl"></i>
+            </div>
+        </div>
+    </div>
+        </div>
+        
+        <!-- Quick Access -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-10 animate-slide-up" style="animation-delay: 0.5s">
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-bolt text-dark-green mr-2"></i>
+            Quick Actions
+          </h3>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="#addProject" class="admin-card bg-light-green p-4 rounded-lg text-center">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-plus"></i>
+              </div>
+              <span class="font-medium text-gray-800">Add Project</span>
+            </a>
+            
+            <a href="#updateProfile" class="admin-card bg-light-green p-4 rounded-lg text-center">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-user-edit"></i>
+              </div>
+              <span class="font-medium text-gray-800">Update Profile</span>
+            </a>
+            
+            <button type="button" class="admin-card bg-light-green p-4 rounded-lg text-center w-full cursor-pointer">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <span class="font-medium text-gray-800">Experience</span>
+            </button>
+            
+            <a href="#analytics" class="admin-card bg-light-green p-4 rounded-lg text-center">
+              <div class="w-12 h-12 rounded-full bg-white mx-auto mb-2 flex items-center justify-center text-dark-green">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <span class="font-medium text-gray-800">Analytics</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Recent Projects -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-10 animate-slide-up" style="animation-delay: 0.6s">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-briefcase text-dark-green mr-2"></i>
+              Recent Projects
+            </h3>
+            
+            <a href="#allProjects" class="text-dark-green hover:underline">
+              View All
+            </a>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b-2 border-gray-100">
+                  <th class="text-left py-3 px-2">Project</th>
+                  <th class="text-left py-3 px-2">Client</th>
+                  <th class="text-left py-3 px-2">Status</th>
+                  <th class="text-left py-3 px-2">Date</th>
+                  <th class="text-left py-3 px-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% projects.forEach(project => { %>
+                  <tr class="table-row border-b border-gray-50">
+                    <td class="py-3 px-2">
+                      <div class="flex items-center">
+                        <div class="w-10 h-10 rounded bg-light-green flex items-center justify-center text-dark-green mr-3">
+                          <i class="fas fa-<%= project.category === 'web' ? 'globe' : project.category === 'app' ? 'mobile-alt' : project.category === 'ui' ? 'paint-brush' : 'cog' %>"></i>
+                        </div>
+                        <span><%= project.title %></span>
+                      </div>
+                    </td>
+                    <td class="py-3 px-2"><%= project.client || 'N/A' %></td>
+                    <td class="py-3 px-2">
+                      <span class="inline-flex items-center">
+                        <span class="status-dot <%= project.featured ? 'active' : 'draft' %>"></span>
+                        <%= project.featured ? 'Active' : 'In Progress' %>
+                      </span>
+                    </td>
+                    <td class="py-3 px-2"><%= project.projectDate.toLocaleDateString() %></td>
+                    <td class="py-3 px-2">
+                      <div class="flex space-x-2">
+                        <button class="text-blue-500 hover:text-blue-700" data-project-id="<%= project._id %>">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-red-500 hover:text-red-700" data-project-id="<%= project._id %>">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Modal -->
+      <div id="updateProfileModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl animate-scale-in">
+          <div class="flex items-center justify-between p-6 border-b">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-user-edit text-dark-green mr-3"></i>
+              Update Profile
+            </h3>
+            <button id="closeProfileModal" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[70vh]">
+            <form id="profileForm">
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-id-card text-dark-green mr-2"></i>
+                  Basic Information
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" name="name" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.name %>" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Professional Title</label>
+                    <input type="text" name="professionalTitle" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.professionalTitle %>" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" name="email" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.email %>" required>
+                  </div>
+                  
+                  <div class="flex items-end">
+                    <div class="w-full">
+                      <label class="block text-gray-700 mb-2">Profile Image</label>
+                      <div class="flex items-center">
+                        <input type="file" id="profileImage" name="profileImage" class="hidden" accept="image/*">
+                        <button type="button" onclick="document.getElementById('profileImage').click()" class="admin-btn bg-light-green text-dark-green px-4 py-2 rounded-lg mr-3">
+                          <i class="fas fa-upload mr-2"></i>
+                          Upload
+                        </button>
+                        <span id="fileName" class="text-sm text-gray-500">No file selected</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-align-left text-dark-green mr-2"></i>
+                  Biography
+                </h4>
+                <textarea name="bio" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all h-32" required><%= userData.bio %></textarea>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-tools text-dark-green mr-2"></i>
+                  Skills
+                </h4>
+                
+                <div id="skillsContainer">
+                  <% userData.skills.forEach((skill, index) => { %>
+                    <div class="flex items-center mb-2 skill-item" data-id="<%= index %>">
+                      <span class="skill-badge bg-light-green text-dark-green px-4 py-2 rounded-full font-medium mr-3">
+                        <%= skill.name %> (<%= skill.proficiency %>/10)
+                      </span>
+                      <input type="hidden" name="skills[<%= index %>][name]" value="<%= skill.name %>">
+                      <input type="hidden" name="skills[<%= index %>][proficiency]" value="<%= skill.proficiency %>">
+                      <button type="button" class="text-red-500 hover:text-red-700 remove-skill">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  <% }) %>
+                </div>
+                
+                <div class="flex justify-between items-center mt-4">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Add New Skill</label>
+                    <div class="flex">
+                      <input type="text" id="newSkillName" class="form-input w-48 px-4 py-2 border rounded-l-lg focus:outline-none transition-all" placeholder="Skill name">
+                      <select id="newSkillProficiency" class="form-input w-32 px-4 py-2 border-t border-b border-r focus:outline-none transition-all">
+                        <option value="5">Proficiency (5/10)</option>
+                        <option value="1">1 - Basic</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5 - Intermediate</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10 - Expert</option>
+                      </select>
+                      <button type="button" id="addSkillBtn" class="admin-btn bg-dark-green text-white px-4 py-2 rounded-r-lg">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-share-alt text-dark-green mr-2"></i>
+                  Social Links
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-linkedin text-blue-600 mr-2"></i>
+                      LinkedIn
+                    </label>
+                    <input type="url" name="socialLinks.linkedin" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.linkedin || '' %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-github text-gray-800 mr-2"></i>
+                      GitHub
+                    </label>
+                    <input type="url" name="socialLinks.github" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.github || '' %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-twitter text-blue-400 mr-2"></i>
+                      Twitter
+                    </label>
+                    <input type="url" name="socialLinks.twitter" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.twitter || '' %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2 flex items-center">
+                      <i class="fab fa-instagram text-pink-600 mr-2"></i>
+                      Instagram
+                    </label>
+                    <input type="url" name="socialLinks.instagram" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" value="<%= userData.socialLinks.instagram || '' %>">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-chart-bar text-dark-green mr-2"></i>
+                  Portfolio Stats
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Projects Completed</label>
+                    <input type="number" name="stats.projectsCompleted" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.projectsCompleted %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Happy Clients</label>
+                    <input type="number" name="stats.happyClients" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.happyClients %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Years Experience</label>
+                    <input type="number" name="stats.yearsExperience" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.yearsExperience %>">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Awards Received</label>
+                    <input type="number" name="stats.awardsReceived" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" min="0" value="<%= userData.stats.awardsReceived %>">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-calendar-check text-dark-green mr-2"></i>
+                  Availability
+                </h4>
+                
+                <div class="flex items-center">
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" name="availableForFreelance" class="form-checkbox h-5 w-5 text-dark-green rounded focus:ring-dark-green" <%= userData.availableForFreelance ? 'checked' : '' %>>
+                    <span class="ml-2 text-gray-700">Available for freelance work</span>
+                  </label>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex justify-end p-6 border-t">
+            <button type="button" id="cancelProfileUpdate" class="admin-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg mr-3">
+              Cancel
+            </button>
+            <button type="button" id="saveProfileChanges" class="admin-btn bg-dark-green text-white px-6 py-2 rounded-lg">
+              <i class="fas fa-save mr-2"></i>
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Modal -->
+      <div id="addProjectModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl animate-scale-in">
+          <div class="flex items-center justify-between p-6 border-b">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-briefcase text-dark-green mr-3"></i>
+              Add New Project
+            </h3>
+            <button id="closeProjectModal" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[70vh]">
+            <form id="projectForm">
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-info-circle text-dark-green mr-2"></i>
+                  Project Information
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Project Title *</label>
+                    <input type="text" name="title" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="E-commerce Website" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Category *</label>
+                    <select name="category" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" required>
+                      <option value="web">Web Development</option>
+                      <option value="ui">UI/UX Design</option>
+                      <option value="app">Mobile App</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Client Name</label>
+                    <input type="text" name="client" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Client or Company Name">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Project Date</label>
+                    <input type="date" name="projectDate" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-align-left text-dark-green mr-2"></i>
+                  Description
+                </h4>
+                
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2">Short Description (max 150 chars) *</label>
+                  <input type="text" name="shortDescription" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Brief overview of the project" maxlength="150" required>
+                  <div class="text-sm text-gray-500 mt-1">
+                    <span id="shortDescCounter">0</span>/150 characters
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 mb-2">Full Description *</label>
+                  <textarea name="description" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all h-32" placeholder="Detailed description of the project, including goals, challenges, and solutions..." required></textarea>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-images text-dark-green mr-2"></i>
+                  Project Images
+                </h4>
+                
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2">Featured Image *</label>
+                  <div class="flex items-center">
+                    <input type="file" id="featuredImage" name="featuredImage" class="hidden" accept="image/*" required>
+                    <button type="button" onclick="document.getElementById('featuredImage').click()" class="admin-btn bg-light-green text-dark-green px-4 py-2 rounded-lg mr-3">
+                      <i class="fas fa-upload mr-2"></i>
+                      Upload
+                    </button>
+                    <span id="featuredImageName" class="text-sm text-gray-500">No file selected</span>
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-gray-700 mb-2">Additional Images</label>
+                  <div class="flex items-center">
+                    <input type="file" id="additionalImages" name="additionalImages" class="hidden" accept="image/*" multiple>
+                    <button type="button" onclick="document.getElementById('additionalImages').click()" class="admin-btn bg-light-green text-dark-green px-4 py-2 rounded-lg mr-3">
+                      <i class="fas fa-upload mr-2"></i>
+                      Upload Multiple
+                    </button>
+                    <span id="additionalImagesCount" class="text-sm text-gray-500">No files selected</span>
+                  </div>
+                  
+                  <div id="additionalImagesPreview" class="flex flex-wrap gap-2 mt-3"></div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-code text-dark-green mr-2"></i>
+                  Technologies Used
+                </h4>
+                
+                <div id="technologiesContainer" class="flex flex-wrap gap-2 mb-3"></div>
+                
+                <div class="flex">
+                  <input type="text" id="newTechnology" class="form-input w-full px-4 py-2 border rounded-l-lg focus:outline-none transition-all" placeholder="Add technology (e.g., React, Node.js, Figma)">
+                  <button type="button" id="addTechnologyBtn" class="admin-btn bg-dark-green text-white px-4 py-2 rounded-r-lg">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-link text-dark-green mr-2"></i>
+                  Project Links
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Project URL</label>
+                    <input type="url" name="projectUrl" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="https://example.com">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">GitHub URL</label>
+                    <input type="url" name="githubUrl" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="https://github.com/username/repo">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-cog text-dark-green mr-2"></i>
+                  Project Settings
+                </h4>
+                
+                <div class="flex flex-col gap-4">
+                  <div class="flex items-center">
+                    <input type="checkbox" id="featured" name="featured" class="form-checkbox h-5 w-5 text-dark-green rounded focus:ring-dark-green">
+                    <label for="featured" class="ml-2 text-gray-700">Featured project (appears in highlighted sections)</label>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Display Order (lower numbers appear first)</label>
+                    <input type="number" name="order" class="form-input w-32 px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="0" min="0" value="0">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex justify-end p-6 border-t">
+            <button type="button" id="cancelProjectAdd" class="admin-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg mr-3">
+              Cancel
+            </button>
+            <button type="button" id="saveProject" class="admin-btn bg-dark-green text-white px-6 py-2 rounded-lg">
+              <i class="fas fa-save mr-2"></i>
+              Save Project
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience Modal -->
+      <div id="addExperienceModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl animate-scale-in">
+          <div class="flex items-center justify-between p-6 border-b">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+              <i class="fas fa-briefcase text-dark-green mr-3"></i>
+              Add Experience
+            </h3>
+            <button id="closeExperienceModal" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[70vh]">
+            <form id="experienceForm">
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-id-card text-dark-green mr-2"></i>
+                  Job Details
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Position</label>
+                    <input type="text" name="position" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Senior Web Developer" required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Company</label>
+                    <input type="text" name="company" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="Acme Inc." required>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Location</label>
+                    <input type="text" name="location" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="New York, NY">
+                  </div>
+                  
+                  <div>
+                    <label class="block text-gray-700 mb-2">Display Order</label>
+                    <input type="number" name="order" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" placeholder="1" min="0" value="0">
+                    <p class="text-xs text-gray-500 mt-1">Lower numbers appear first</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-calendar-alt text-dark-green mr-2"></i>
+                  Time Period
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                  <div>
+                    <label class="block text-gray-700 mb-2">Start Date</label>
+                    <input type="date" name="startDate" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all" required>
+                  </div>
+                  
+                  <div id="endDateContainer">
+                    <label class="block text-gray-700 mb-2">End Date</label>
+                    <input type="date" name="endDate" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all">
+                  </div>
+                </div>
+                
+                <div class="flex items-center">
+                  <label class="inline-flex items-center">
+                    <input type="checkbox" name="current" id="currentPosition" class="form-checkbox h-5 w-5 text-dark-green rounded focus:ring-dark-green">
+                    <span class="ml-2 text-gray-700">I currently work here</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-align-left text-dark-green mr-2"></i>
+                  Job Description
+                </h4>
+                <textarea name="description" class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none transition-all h-32" placeholder="Describe your responsibilities and achievements..." required></textarea>
+              </div>
+              
+              <div class="mb-8">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-tools text-dark-green mr-2"></i>
+                  Skills Used
+                </h4>
+                
+                <div id="experienceSkillsContainer" class="flex flex-wrap gap-2 mb-4"></div>
+                
+                <div class="flex items-end">
+                  <div class="w-full">
+                    <label class="block text-gray-700 mb-2">Add Skill</label>
+                    <div class="flex">
+                      <input type="text" id="newExperienceSkill" class="form-input w-full px-4 py-2 border rounded-l-lg focus:outline-none transition-all" placeholder="e.g. JavaScript, React, Node.js">
+                      <button type="button" id="addExperienceSkillBtn" class="admin-btn bg-dark-green text-white px-4 py-2 rounded-r-lg">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex justify-end p-6 border-t">
+            <button type="button" id="cancelExperienceAdd" class="admin-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-lg mr-3">
+              Cancel
+            </button>
+            <button type="button" id="saveExperience" class="admin-btn bg-dark-green text-white px-6 py-2 rounded-lg">
+              <i class="fas fa-save mr-2"></i>
+              Save Experience
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Message Modal -->
+
+ <div id="messagesModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-3xl max-h-[80vh] overflow-y-auto">
+            <!-- Modal Header -->
+            <div class="p-6 border-b flex justify-between items-center">
+                <h2 class="text-xl font-bold">Messages</h2>
+                <button onclick="closeMessagesModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Messages List -->
+            <div id="messagesList" class="p-6">
+                <!-- Messages will be dynamically loaded here -->
+            </div>
+
+            <!-- Message Detail View -->
+            <div id="messageDetail" class="p-6 border-t hidden">
+                <button onclick="backToMessages()" class="mb-4 text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Messages
+                </button>
+                <div id="messageContent">
+                    <!-- Detailed message content will be loaded here -->
+                </div>
+                <div class="flex justify-end gap-2 mt-4">
+                    <button id="replyButton" class="px-4 py-2 bg-blue-600 text-white rounded-md">Reply</button>
+                    <button id="deleteButton" class="px-4 py-2 bg-red-600 text-white rounded-md">Delete</button>
+                </div>
+            </div>
+
+            <!-- Reply Form (Hidden by default) -->
+            <div id="replyForm" class="p-6 border-t hidden">
+                <h3 class="text-lg font-semibold mb-4">Reply to Message</h3>
+                <form id="replyMessageForm">
+                    <input type="hidden" id="replyMessageId">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">To</label>
+                        <input type="email" id="replyEmail" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Subject</label>
+                        <input type="text" id="replySubject" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700">Message</label>
+                        <textarea id="replyMessage" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" onclick="cancelReply()" class="px-4 py-2 bg-gray-200 rounded-md">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">Send Reply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Toggle sidebar on mobile
+document.getElementById('sidebar-toggle').addEventListener('click', function() {
+const sidebar = document.getElementById('sidebar');
+sidebar.classList.toggle('hidden');
+sidebar.classList.toggle('animate-slide-in-left');
+});
+
+// Activate sidebar links
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+sidebarLinks.forEach(link => {
+link.addEventListener('click', function(e) {
+e.preventDefault();
+
+// Remove active class from all links
+sidebarLinks.forEach(l => l.classList.remove('active'));
+
+// Add active class to clicked link
+this.classList.add('active');
+
+// Hide all sections
+document.querySelectorAll('[id$="-form"]').forEach(section => {
+section.classList.add('hidden');
+});
+
+// Show the corresponding section
+const targetId = this.getAttribute('href').substring(1) + '-form';
+const targetSection = document.getElementById(targetId);
+if (targetSection) {
+targetSection.classList.remove('hidden');
+targetSection.scrollIntoView({ behavior: 'smooth' });
+}
+});
+});
+
+// Initialize with dashboard visible
+document.addEventListener('DOMContentLoaded', function() {
+document.getElementById('dashboard').classList.remove('hidden');
+});
+
+
+
+// Modal toggle functionality
+function toggleProfileModal() {
+  const modal = document.getElementById('updateProfileModal');
+  modal.classList.toggle('hidden');
+  
+  if (!modal.classList.contains('hidden')) {
+    // Load current profile data when opening modal
+    loadProfileData();
+  }
+}
+
+// Close modal handlers
+document.getElementById('closeProfileModal').addEventListener('click', toggleProfileModal);
+document.getElementById('cancelProfileUpdate').addEventListener('click', toggleProfileModal);
+
+// File input handler
+document.getElementById('profileImage').addEventListener('change', function(e) {
+  const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
+  document.getElementById('fileName').textContent = fileName;
+});
+
+// Skill management
+document.getElementById('addSkillBtn').addEventListener('click', function() {
+  const nameInput = document.getElementById('newSkillName');
+  const proficiencySelect = document.getElementById('newSkillProficiency');
+  
+  if (nameInput.value.trim() === '') return;
+  
+  const skillId = Date.now(); // Unique ID for the skill
+  const skillElement = document.createElement('div');
+  skillElement.className = 'flex items-center mb-2 skill-item';
+  skillElement.dataset.id = skillId;
+  skillElement.innerHTML = `
+    <span class="skill-badge bg-light-green text-dark-green px-4 py-2 rounded-full font-medium mr-3">
+      ${nameInput.value} (${proficiencySelect.value}/10)
+    </span>
+    <input type="hidden" name="skills[${skillId}][name]" value="${nameInput.value}">
+    <input type="hidden" name="skills[${skillId}][proficiency]" value="${proficiencySelect.value}">
+    <button type="button" class="text-red-500 hover:text-red-700 remove-skill">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
+  
+  document.getElementById('skillsContainer').appendChild(skillElement);
+  
+  // Add remove skill functionality
+  skillElement.querySelector('.remove-skill').addEventListener('click', function() {
+    skillElement.remove();
+  });
+  
+  // Clear inputs
+  nameInput.value = '';
+  proficiencySelect.value = '5';
+});
+
+// Load profile data from server
+function loadProfileData() {
+    fetch('/profile')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error("Response wasn't JSON");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data); // Debug log
+            
+            const form = document.getElementById('profileForm');
+            
+            // Basic info
+            if (data.name) form.elements['name'].value = data.name;
+            if (data.professionalTitle) form.elements['professionalTitle'].value = data.professionalTitle;
+            if (data.email) form.elements['email'].value = data.email;
+            
+            // Bio
+            if (data.bio) form.elements['bio'].value = data.bio;
+            
+            // Skills
+            const skillsContainer = document.getElementById('skillsContainer');
+            skillsContainer.innerHTML = '';
+            
+            if (data.skills && Array.isArray(data.skills)) {
+                data.skills.forEach((skill, index) => {
+                    const skillElement = document.createElement('div');
+                    skillElement.className = 'flex items-center mb-2 skill-item';
+                    skillElement.dataset.id = index;
+                    skillElement.innerHTML = `
+                        <span class="skill-badge bg-light-green text-dark-green px-4 py-2 rounded-full font-medium mr-3">
+                            ${skill.name} (${skill.proficiency}/10)
+                        </span>
+                        <input type="hidden" name="skills[${index}][name]" value="${skill.name}">
+                        <input type="hidden" name="skills[${index}][proficiency]" value="${skill.proficiency}">
+                        <button type="button" class="text-red-500 hover:text-red-700 remove-skill">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    skillsContainer.appendChild(skillElement);
+                    
+                    // Add remove skill functionality
+                    skillElement.querySelector('.remove-skill').addEventListener('click', function() {
+                        skillElement.remove();
+                    });
+                });
+            }
+            
+            // Social links - with null checks
+            if (data.socialLinks) {
+                form.elements['socialLinks.linkedin'].value = data.socialLinks.linkedin || '';
+                form.elements['socialLinks.github'].value = data.socialLinks.github || '';
+                form.elements['socialLinks.twitter'].value = data.socialLinks.twitter || '';
+                form.elements['socialLinks.instagram'].value = data.socialLinks.instagram || '';
+            }
+            
+            // Stats - with null checks
+            if (data.stats) {
+                form.elements['stats.projectsCompleted'].value = data.stats.projectsCompleted || 0;
+                form.elements['stats.happyClients'].value = data.stats.happyClients || 0;
+                form.elements['stats.yearsExperience'].value = data.stats.yearsExperience || 0;
+                form.elements['stats.awardsReceived'].value = data.stats.awardsReceived || 0;
+            }
+            
+            // Availability
+            if (typeof data.availableForFreelance !== 'undefined') {
+                form.elements['availableForFreelance'].checked = data.availableForFreelance;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading profile data:', error);
+            alert('Failed to load profile data. Please try again later.');
+        });
+}
+
+
+
+// Save profile data
+document.getElementById('saveProfileChanges').addEventListener('click', async function() {
+  const form = document.getElementById('profileForm');
+  const saveButton = this;
+  
+  try {
+    // Disable button during submission
+    saveButton.disabled = true;
+    saveButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+
+    // Prepare profile data
+    const profileData = {
+      name: form.elements['name'].value,
+      professionalTitle: form.elements['professionalTitle'].value,
+      email: form.elements['email'].value,
+      bio: form.elements['bio'].value,
+      socialLinks: {
+        linkedin: form.elements['socialLinks.linkedin'].value,
+        github: form.elements['socialLinks.github'].value,
+        twitter: form.elements['socialLinks.twitter'].value,
+        instagram: form.elements['socialLinks.instagram'].value
+      },
+      stats: {
+        projectsCompleted: parseInt(form.elements['stats.projectsCompleted'].value) || 0,
+        happyClients: parseInt(form.elements['stats.happyClients'].value) || 0,
+        yearsExperience: parseInt(form.elements['stats.yearsExperience'].value) || 0,
+        awardsReceived: parseInt(form.elements['stats.awardsReceived'].value) || 0
+      },
+      availableForFreelance: form.elements['availableForFreelance'].checked,
+      skills: Array.from(document.querySelectorAll('.skill-item')).map(item => ({
+        name: item.querySelector('input[name^="skills["][name$="[name]"]').value,
+        proficiency: parseInt(item.querySelector('input[name^="skills["][name$="[proficiency]"]').value)
+      }))
+    };
+
+    // Handle file upload if exists
+    const fileInput = document.getElementById('profileImage');
+    const formData = new FormData();
+    
+    if (fileInput.files[0]) {
+      formData.append('profileImage', fileInput.files[0]);
+    }
+    formData.append('profileData', JSON.stringify(profileData));
+
+    // Send request
+    const response = await fetch('/profile', {
+      method: 'POST',
+      body: formData,
+      credentials: 'include' // Important for sessions/cookies
+    });
+
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      throw new Error(`Expected JSON but got: ${text.substring(0, 100)}...`);
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to update profile');
+    }
+
+    if (data.success) {
+      toggleProfileModal();
+      alert('Profile updated successfully!');
+      // Optionally refresh parts of the page
+    } else {
+      throw new Error(data.message || 'Error updating profile');
+    }
+  } catch (error) {
+    console.error('Error saving profile:', error);
+    alert(`Error: ${error.message}`);
+  } finally {
+    saveButton.disabled = false;
+    saveButton.innerHTML = '<i class="fas fa-save mr-2"></i> Save Changes';
+  }
+});
+// Add event listener to your "Update Profile" button
+document.querySelector('[href="#updateProfile"]').addEventListener('click', function(e) {
+  e.preventDefault();
+  toggleProfileModal();
+});
+
+
+
+
+
+
+ // Toggle project modal
+ function toggleProjectModal() {
+    const modal = document.getElementById('addProjectModal');
+    modal.classList.toggle('hidden');
+    
+    if (!modal.classList.contains('hidden')) {
+      // Reset form when opening
+      document.getElementById('projectForm').reset();
+      document.getElementById('technologiesContainer').innerHTML = '';
+      document.getElementById('additionalImagesPreview').innerHTML = '';
+      document.getElementById('featuredImageName').textContent = 'No file selected';
+      document.getElementById('additionalImagesCount').textContent = 'No files selected';
+      document.getElementById('shortDescCounter').textContent = '0';
+    }
+  }
+
+  // Close modal handlers
+  document.getElementById('closeProjectModal').addEventListener('click', toggleProjectModal);
+  document.getElementById('cancelProjectAdd').addEventListener('click', toggleProjectModal);
+
+  // File input handlers
+  document.getElementById('featuredImage').addEventListener('change', function(e) {
+    const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
+    document.getElementById('featuredImageName').textContent = fileName;
+  });
+
+  document.getElementById('additionalImages').addEventListener('change', function(e) {
+    const fileCount = e.target.files.length;
+    document.getElementById('additionalImagesCount').textContent = fileCount > 0 ? 
+      `${fileCount} file${fileCount > 1 ? 's' : ''} selected` : 
+      'No files selected';
+    
+    // Preview images
+    const previewContainer = document.getElementById('additionalImagesPreview');
+    previewContainer.innerHTML = '';
+    
+    Array.from(e.target.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const preview = document.createElement('div');
+        preview.className = 'relative w-20 h-20 bg-gray-100 rounded overflow-hidden';
+        preview.innerHTML = `
+          <img src="${event.target.result}" class="w-full h-full object-cover">
+          <div class="absolute top-0 right-0 bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-bl cursor-pointer remove-preview">
+            <i class="fas fa-times text-xs"></i>
+          </div>
+        `;
+        previewContainer.appendChild(preview);
+        
+        // Add removal functionality
+        preview.querySelector('.remove-preview').addEventListener('click', function() {
+          preview.remove();
+          // Note: This doesn't actually remove the file from the input
+          // In a real app, you'd need to handle this with a FileList manipulation
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Short description counter
+  document.querySelector('input[name="shortDescription"]').addEventListener('input', function() {
+    document.getElementById('shortDescCounter').textContent = this.value.length;
+  });
+
+  // Technology management
+  document.getElementById('addTechnologyBtn').addEventListener('click', function() {
+    const techInput = document.getElementById('newTechnology');
+    const techValue = techInput.value.trim();
+    
+    if (techValue === '') return;
+    
+    const techId = Date.now(); // Unique ID for the technology
+    const techElement = document.createElement('div');
+    techElement.className = 'tech-badge bg-light-green text-dark-green px-3 py-1 rounded-full font-medium flex items-center';
+    techElement.dataset.tech = techValue;
+    techElement.innerHTML = `
+      ${techValue}
+      <input type="hidden" name="technologies[]" value="${techValue}">
+      <button type="button" class="ml-2 text-red-500 hover:text-red-700 remove-tech">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+    
+    document.getElementById('technologiesContainer').appendChild(techElement);
+    
+    // Add remove functionality
+    techElement.querySelector('.remove-tech').addEventListener('click', function() {
+      techElement.remove();
+    });
+    
+    // Clear input
+    techInput.value = '';
+  });
+
+  // Submit project form
+  document.getElementById('saveProject').addEventListener('click', async function() {
+    const form = document.getElementById('projectForm');
+    const saveButton = this;
+    
+    // Basic validation
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    
+    try {
+      // Disable button during submission
+      saveButton.disabled = true;
+      saveButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+
+      const formData = new FormData(form);
+      
+      // Add featured image file
+      const featuredImageInput = document.getElementById('featuredImage');
+      if (featuredImageInput.files[0]) {
+        formData.set('featuredImage', featuredImageInput.files[0]);
+      }
+      
+      // Add additional image files
+      const additionalImagesInput = document.getElementById('additionalImages');
+      if (additionalImagesInput.files.length > 0) {
+        Array.from(additionalImagesInput.files).forEach((file, index) => {
+          formData.append('additionalImages', file);
+        });
+      }
+
+      // Send request
+      const response = await fetch('/addProjects', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+      });
+
+      // Check response
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add project');
+      }
+
+      const data = await response.json();
+      
+      // Success handling
+      toggleProjectModal();
+      alert('Project added successfully!');
+      
+      // Optionally refresh projects list or navigate to projects page
+      // window.location.href = '#projects';
+      
+    } catch (error) {
+      console.error('Error adding project:', error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      saveButton.disabled = false;
+      saveButton.innerHTML = '<i class="fas fa-save mr-2"></i> Save Project';
+    }
+  });
+
+  // Initialize event listener for quick action button
+  document.querySelector('[href="#addProject"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleProjectModal();
+  });
+
+
+
+
+
+
+
+   // Experience Modal Functionality
+   document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const adminCard = document.querySelector('button.admin-card');
+    const experienceModal = document.getElementById('addExperienceModal');
+    const closeExperienceModal = document.getElementById('closeExperienceModal');
+    const cancelExperienceAdd = document.getElementById('cancelExperienceAdd');
+    const saveExperience = document.getElementById('saveExperience');
+    const currentPositionCheckbox = document.getElementById('currentPosition');
+    const endDateContainer = document.getElementById('endDateContainer');
+    const experienceSkillsContainer = document.getElementById('experienceSkillsContainer');
+    const newExperienceSkill = document.getElementById('newExperienceSkill');
+    const addExperienceSkillBtn = document.getElementById('addExperienceSkillBtn');
+    
+    // Store skills
+    const experienceSkills = [];
+    
+    // Open modal when admin card is clicked
+    adminCard.addEventListener('click', function(e) {
+      e.preventDefault();
+      experienceModal.classList.remove('hidden');
+    });
+    
+    // Close modal functions
+    const closeModal = function() {
+      experienceModal.classList.add('hidden');
+    };
+    
+    closeExperienceModal.addEventListener('click', closeModal);
+    cancelExperienceAdd.addEventListener('click', closeModal);
+    
+    // Handle "I currently work here" checkbox
+    currentPositionCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        endDateContainer.style.opacity = '0.5';
+        endDateContainer.querySelector('input').disabled = true;
+      } else {
+        endDateContainer.style.opacity = '1';
+        endDateContainer.querySelector('input').disabled = false;
+      }
+    });
+    
+    // Add skill functionality
+    const addSkill = function(skillName) {
+      if (!skillName || experienceSkills.includes(skillName)) return;
+      
+      experienceSkills.push(skillName);
+      
+      // Create skill tag
+      const skillTag = document.createElement('div');
+      skillTag.className = 'bg-light-green text-dark-green px-3 py-1 rounded-full flex items-center';
+      skillTag.innerHTML = `
+        <span>${skillName}</span>
+        <button type="button" class="ml-2 text-dark-green hover:text-red-600" data-skill="${skillName}">
+          <i class="fas fa-times-circle"></i>
+        </button>
+      `;
+      
+      // Add delete functionality
+      skillTag.querySelector('button').addEventListener('click', function() {
+        const skillToRemove = this.getAttribute('data-skill');
+        const index = experienceSkills.indexOf(skillToRemove);
+        if (index > -1) {
+          experienceSkills.splice(index, 1);
+        }
+        this.parentElement.remove();
+      });
+      
+      experienceSkillsContainer.appendChild(skillTag);
+      newExperienceSkill.value = '';
+    };
+    
+    // Add skill button
+    addExperienceSkillBtn.addEventListener('click', function() {
+      addSkill(newExperienceSkill.value.trim());
+    });
+    
+    // Add skill on enter key
+    newExperienceSkill.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addSkill(this.value.trim());
+      }
+    });
+    
+    // Save experience with fetch
+    saveExperience.addEventListener('click', async function() {
+      const form = document.getElementById('experienceForm');
+      const saveButton = this;
+      
+      // Basic validation
+      if (!form.position.value || !form.company.value || !form.description.value || !form.startDate.value) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      try {
+        // Disable button during submission
+        saveButton.disabled = true;
+        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+        
+        // Prepare experience data
+        const experienceData = {
+          position: form.position.value,
+          company: form.company.value,
+          location: form.location.value,
+          description: form.description.value,
+          startDate: form.startDate.value,
+          current: currentPositionCheckbox.checked,
+          order: parseInt(form.order.value) || 0,
+          skills: [...experienceSkills] // Create a copy of the skills array
+        };
+        
+        // Only add end date if not current position
+        if (!currentPositionCheckbox.checked && form.endDate.value) {
+          experienceData.endDate = form.endDate.value;
+        }
+        
+        // Send request
+        const response = await fetch('/experience', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(experienceData),
+          credentials: 'include' 
+        });
+        
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          throw new Error(`Expected JSON but got: ${text.substring(0, 100)}...`);
+        }
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to save experience');
+        }
+        
+        if (data.success) {
+          // Close modal and reset form
+          form.reset();
+          experienceSkillsContainer.innerHTML = '';
+          experienceSkills.length = 0; // Clear skills array
+          closeModal();
+          
+          // Show success message
+          const notification = document.createElement('div');
+          notification.className = 'fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md';
+          notification.innerHTML = `
+            <div class="flex items-center">
+              <i class="fas fa-check-circle mr-2"></i>
+              <p>Experience added successfully!</p>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          
+          // Remove notification after 3 seconds
+          setTimeout(() => {
+            notification.remove();
+          }, 3000);
+          
+          // Optionally refresh the experience list if it exists on the page
+          if (typeof refreshExperienceList === 'function') {
+            refreshExperienceList();
+          }
+        } else {
+          throw new Error(data.message || 'Error saving experience');
+        }
+      } catch (error) {
+        console.error('Error saving experience:', error);
+        
+        // Show error message
+        const notification = document.createElement('div');
+        notification.className = 'fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md';
+        notification.innerHTML = `
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <p>Error: ${error.message}</p>
+          </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+          notification.remove();
+        }, 5000);
+      } finally {
+        // Re-enable button
+        saveButton.disabled = false;
+        saveButton.innerHTML = '<i class="fas fa-save mr-2"></i> Save Experience';
+      }
+    });
+  });
+
+
+   let currentMessageId = null;
+
+        // Modal control functions
+        async function openMessagesModal() {
+            document.getElementById('messagesModal').classList.remove('hidden');
+            document.getElementById('messagesList').classList.remove('hidden');
+            document.getElementById('messageDetail').classList.add('hidden');
+            document.getElementById('replyForm').classList.add('hidden');
+            await fetchMessages(); // Fetch messages when card is clicked
+        }
+
+        function closeMessagesModal() {
+            document.getElementById('messagesModal').classList.add('hidden');
+            document.getElementById('messagesList').classList.remove('hidden');
+            document.getElementById('messageDetail').classList.add('hidden');
+            document.getElementById('replyForm').classList.add('hidden');
+            currentMessageId = null;
+        }
+
+        function showReplyForm(messageId, email, subject) {
+            currentMessageId = messageId;
+            document.getElementById('replyMessageId').value = messageId;
+            document.getElementById('replyEmail').value = email;
+            document.getElementById('replySubject').value = `Re: ${subject}`;
+            document.getElementById('replyMessage').value = '';
+            document.getElementById('messagesList').classList.add('hidden');
+            document.getElementById('messageDetail').classList.add('hidden');
+            document.getElementById('replyForm').classList.remove('hidden');
+        }
+
+        function cancelReply() {
+            document.getElementById('replyForm').classList.add('hidden');
+            document.getElementById('messageDetail').classList.remove('hidden');
+        }
+
+        function backToMessages() {
+            document.getElementById('messagesList').classList.remove('hidden');
+            document.getElementById('messageDetail').classList.add('hidden');
+            document.getElementById('replyForm').classList.add('hidden');
+            currentMessageId = null;
+            fetchMessages(); // Refresh messages when going back
+        }
+
+        // Fetch messages using getMessages endpoint
+        async function fetchMessages() {
+            try {
+                const response = await fetch('/messages');
+                const result = await response.json();
+                if (result.success) {
+                    displayMessages(result.data);
+                    updateCounts(result.data);
+                } else {
+                    console.error('Failed to fetch messages:', result.error);
+                    document.getElementById('messagesList').innerHTML = '<p class="text-red-500">Error loading messages</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+                document.getElementById('messagesList').innerHTML = '<p class="text-red-500">Error loading messages</p>';
+            }
+        }
+
+        // Display messages in the modal
+        function displayMessages(messages) {
+            const messagesList = document.getElementById('messagesList');
+            messagesList.innerHTML = messages.length > 0 ? messages.map(message => `
+                <div class="border-b py-4 cursor-pointer hover:bg-gray-100" onclick="viewMessage('${message._id}')">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="${message.read ? 'font-normal' : 'font-semibold'}">${message.name}</h4>
+                            <p class="text-sm text-gray-600">${message.email}</p>
+                            <p class="text-sm text-gray-600">${message.subject}</p>
+                            <p class="text-sm text-gray-500 truncate max-w-md">${message.message}</p>
+                            <p class="text-xs text-gray-400 mt-1">${new Date(message.createdAt).toLocaleString()}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="event.stopPropagation(); showReplyForm('${message._id}', '${message.email}', '${message.subject}')"
+                                class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-reply"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteMessage('${message._id}')"
+                                class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-gray-500">No messages found</p>';
+        }
+
+        // View single message
+        async function viewMessage(messageId) {
+            try {
+                const response = await fetch(`/messages/${messageId}`);
+                const result = await response.json();
+                if (result.success) {
+                    currentMessageId = messageId;
+                    displayMessageDetail(result.data);
+                    document.getElementById('messagesList').classList.add('hidden');
+                    document.getElementById('messageDetail').classList.remove('hidden');
+                    // Set up button event listeners
+                    document.getElementById('replyButton').onclick = () => showReplyForm(
+                        result.data._id,
+                        result.data.email,
+                        result.data.subject
+                    );
+                    document.getElementById('deleteButton').onclick = () => deleteMessage(messageId);
+                } else {
+                    console.error('Failed to fetch message:', result.error);
+                }
+            } catch (error) {
+                console.error('Error fetching message:', error);
+            }
+        }
+
+        // Display message details
+        function displayMessageDetail(message) {
+            const messageContent = document.getElementById('messageContent');
+            messageContent.innerHTML = `
+                <h3 class="text-lg font-semibold">${message.subject}</h3>
+                <p class="text-sm text-gray-600">From: ${message.name} (${message.email})</p>
+                <p class="text-sm text-gray-600">Date: ${new Date(message.createdAt).toLocaleString()}</p>
+                <p class="text-sm text-gray-600">Location: ${message.location || 'Not provided'}</p>
+                <p class="mt-4">${message.message.replace(/\n/g, '<br>')}</p>
+            `;
+        }
+
+        // Update counts on card
+        function updateCounts(messages) {
+            document.getElementById('contactRequestsCount').textContent = messages.length;
+            document.getElementById('unreadCount').textContent = messages.filter(m => !m.read).length;
+        }
+
+        // Delete message
+        async function deleteMessage(messageId) {
+            if (confirm('Are you sure you want to delete this message?')) {
+                try {
+                    const response = await fetch(`/messages/${messageId}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        if (document.getElementById('messageDetail').classList.contains('hidden')) {
+                            fetchMessages();
+                        } else {
+                            backToMessages();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error deleting message:', error);
+                }
+            }
+        }
+
+        // Handle reply form submission
+        document.getElementById('replyMessageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageId = document.getElementById('replyMessageId').value;
+            const email = document.getElementById('replyEmail').value;
+            const subject = document.getElementById('replySubject').value;
+            const message = document.getElementById('replyMessage').value;
+
+            try {
+                const response = await fetch('/messages/reply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ messageId, email, subject, message })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    cancelReply();
+                    if (currentMessageId) {
+                        viewMessage(currentMessageId); // Refresh message view
+                    } else {
+                        backToMessages();
+                    }
+                }
+            } catch (error) {
+                console.error('Error sending reply:', error);
+            }
+        });
+
+  
+
+  document.getElementById('logoutBtn').addEventListener('click', function (e) {
+  e.preventDefault(); // prevent default anchor behavior
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You will be logged out!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, logout'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // redirect to logout
+      window.location.href = "/logout";
+    }
+  });
+});
+
+</script>
+</body>
+</html>

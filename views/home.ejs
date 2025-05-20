@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= user.name || 'Portfolio' %>'s Portfolio</title>
+    <!-- Font Awesome CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'light-green': '#E6F7E9',
+              'medium-green': '#A5D6A7',
+              'dark-green': '#75C278',
+            },
+            animation: {
+              'fade-in': 'fadeIn 1s ease-in-out',
+              'slide-up': 'slideUp 0.7s ease-out',
+              'slide-down': 'slideDown 0.7s ease-out',
+              'slide-in-right': 'slideInRight 0.7s ease-out',
+              'slide-in-left': 'slideInLeft 0.7s ease-out',
+              'bounce-slow': 'bounce 3s infinite',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float': 'float 5s ease-in-out infinite',
+              'float-slow': 'float 8s ease-in-out infinite',
+              'typing': 'typing 3.5s steps(40, end), blink 0.75s step-end infinite',
+              'scale-in': 'scaleIn 0.5s ease-out',
+              'rotate-in': 'rotateIn 0.7s ease-out',
+              'wave': 'wave 2.5s ease-in-out infinite',
+              'shimmer': 'shimmer 2s infinite linear',
+              'bounce-in': 'bounceIn 0.7s ease-out',
+              'spin-slow': 'spin 8s linear infinite',
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { transform: 'translateY(50px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+              slideDown: { '0%': { transform: 'translateY(-50px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+              slideInRight: { '0%': { transform: 'translateX(50px)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+              slideInLeft: { '0%': { transform: 'translateX(-50px)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+              float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+              typing: { '0%': { width: '0' }, '100%': { width: '100%' } },
+              blink: { 'from, to': { borderColor: 'transparent' }, '50%': { borderColor: '#75C278' } },
+              scaleIn: { '0%': { transform: 'scale(0)', opacity: '0' }, '80%': { transform: 'scale(1.1)' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+              rotateIn: { '0%': { transform: 'rotate(-90deg)', opacity: '0' }, '100%': { transform: 'rotate(0)', opacity: '1' } },
+              wave: {
+                '0%': { transform: 'rotate(0deg)' },
+                '10%': { transform: 'rotate(14deg)' },
+                '20%': { transform: 'rotate(-8deg)' },
+                '30%': { transform: 'rotate(14deg)' },
+                '40%': { transform: 'rotate(-4deg)' },
+                '50%': { transform: 'rotate(10deg)' },
+                '60%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(0deg)' },
+              },
+              shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+              bounceIn: { '0%': { transform: 'scale(0.3)', opacity: '0' }, '50%': { transform: 'scale(1.05)' }, '70%': { transform: 'scale(0.9)' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Import Poppins font */
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      /* Gradient background */
+      .bg-gradient {
+        background: linear-gradient(120deg, #e6f7e9, #a5d6a7, #e6f7e9);
+        background-size: 200% 200%;
+        animation: gradientBG 15s ease infinite;
+      }
+
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* Profile photo container */
+      .photo-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .photo-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        border: 4px solid transparent;
+        background: linear-gradient(120deg, #75c278, #a5d6a7) border-box;
+        -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: rotate 10s linear infinite;
+      }
+
+      .photo-container::after {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border-radius: 50%;
+        border: 2px solid #75c278;
+        opacity: 0.7;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.05); opacity: 0.3; }
+        100% { transform: scale(1); opacity: 0.7; }
+      }
+
+      /* Skill badges */
+      .skill-badge {
+        transition: all 0.3s ease;
+      }
+
+      .skill-badge:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Expanding border for headings */
+      .expanding-border {
+        position: relative;
+      }
+
+      .expanding-border::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(to right, #75c278, #a5d6a7);
+        transition: width 0.5s ease;
+      }
+
+      .expanding-border:hover::after {
+        width: 100%;
+      }
+
+      /* Typing animation */
+      .typing-container {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid #75c278;
+        animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
+      }
+
+      /* Shimmer effect */
+      .shimmer {
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite linear;
+      }
+
+      /* Floating cards */
+      .floating-card {
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .floating-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Circle background accents */
+      .circle-bg {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(117, 194, 120, 0.1);
+        z-index: -1;
+      }
+
+      /* Wavy background */
+      .wavy-bg {
+        position: absolute;
+        width: 100%;
+        height: 15px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23E6F7E9'%3E%3C/path%3E%3C/svg%3E");
+        background-size: 1200px 100%;
+        animation: wave 20s linear infinite;
+      }
+
+      @keyframes wave {
+        0% { background-position-x: 0; }
+        100% { background-position-x: 1200px; }
+      }
+
+      /* Navigation links */
+      .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #75c278;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        width: 100%;
+      }
+
+      /* Social icons */
+      .social-icon {
+        transition: all 0.3s ease;
+        transform-origin: center;
+      }
+
+      .social-icon:hover {
+        transform: scale(1.2) rotate(5deg);
+      }
+
+      /* Animated buttons */
+      .animated-btn {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .animated-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.4s;
+        z-index: 1;
+      }
+
+      .animated-btn:hover::before {
+        left: 100%;
+      }
+
+      .animated-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="bg-gradient min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white bg-opacity-90 shadow-md py-4 sticky top-0 z-10 animate-slide-down">
+      <div class="container mx-auto px-6 flex flex-wrap items-center justify-between">
+        <a href="/" class="text-2xl font-bold text-dark-green"><%= user.name || 'Your Name' %></a>
+        <div class="flex space-x-6">
+          <a href="/" class="nav-link text-gray-700 hover:text-dark-green active">Home</a>
+          <a href="/loadAbout" class="nav-link text-gray-700 hover:text-dark-green">About</a>
+          <a href="/loadProject" class="nav-link text-gray-700 hover:text-dark-green">Projects</a>
+          <a href="/loadContact" class="nav-link text-gray-700 hover:text-dark-green">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Background Circle Elements -->
+    <div class="circle-bg absolute top-32 left-20 w-64 h-64 animate-pulse-slow"></div>
+    <div class="circle-bg absolute top-96 right-20 w-48 h-48 animate-float-slow"></div>
+    <div class="circle-bg absolute bottom-32 left-1/4 w-32 h-32 animate-spin-slow"></div>
+
+    <!-- Hero Section -->
+    <main class="flex-grow flex items-center justify-center p-6 relative">
+      <div class="wavy-bg bottom-0 left-0"></div>
+      <div class="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in relative z-10">
+        <div class="flex flex-col lg:flex-row">
+          <!-- Left column with profile photo -->
+          <div class="lg:w-1/3 p-8 bg-light-green flex items-center justify-center relative">
+            <div class="absolute top-6 left-6">
+              <div class="animate-wave origin-bottom-right">
+                <i class="far fa-hand-paper text-dark-green text-2xl"></i>
+              </div>
+            </div>
+            <div class="absolute top-6 right-6 animate-bounce-slow">
+              <div class="relative">
+                <div class="w-12 h-12 rounded-full bg-white bg-opacity-70 flex items-center justify-center">
+                  <i class="fas fa-lightbulb text-dark-green text-xl"></i>
+                </div>
+                <span class="absolute -top-2 -right-2 w-4 h-4 bg-dark-green rounded-full animate-pulse-slow"></span>
+              </div>
+            </div>
+            <div class="photo-container w-64 h-64 animate-float relative">
+              <div class="absolute inset-0 bg-medium-green bg-opacity-20 rounded-full animate-pulse-slow z-0"></div>
+              <img
+                src="<%= user.profileImage || 'https://via.placeholder.com/256' %>"
+                alt="Profile Photo"
+                class="w-full h-full object-cover rounded-full p-2 relative z-10 animate-scale-in"
+                onerror="this.src='https://via.placeholder.com/256'"
+              />
+            </div>
+            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce-in delay-700">
+              <div class="bg-white rounded-full px-4 py-2 shadow-lg">
+                <span class="text-dark-green font-medium">Let's Connect!</span>
+              </div>
+            </div>
+          </div>
+          <!-- Right column with introduction text -->
+          <div class="lg:w-2/3 p-8 lg:p-12 relative">
+            <div class="delay-100 animate-slide-up">
+              <% if (user.availableForFreelance) { %>
+                <span class="bg-light-green text-dark-green px-3 py-1 rounded-full text-sm font-medium animate-pulse-slow inline-block mb-4">
+                  <i class="fas fa-star mr-1"></i> Available for Freelance
+                </span>
+              <% } %>
+              <h1 class="text-4xl font-bold text-dark-green mb-2 expanding-border inline-block">
+                Hello, I'm <span class="typing-container overflow-hidden whitespace-nowrap"><%= user.name || 'Your Name' %></span>
+              </h1>
+            </div>
+            <div class="delay-300 animate-slide-up">
+              <h2 class="text-2xl text-medium-green font-medium mb-6 flex items-center">
+                <span><%= user.professionalTitle || 'Professional Title' %></span>
+                <span class="ml-3 inline-block animate-pulse-slow">
+                  <i class="fas fa-check-circle text-dark-green"></i>
+                </span>
+              </h2>
+            </div>
+            <div class="delay-500 animate-slide-up">
+              <p class="text-lg text-gray-700 mb-8 leading-relaxed relative">
+                <span class="shimmer absolute inset-0"></span>
+                <%= user.bio || 'A passionate developer creating innovative solutions.' %>
+              </p>
+            </div>
+            <div class="delay-700 animate-slide-up">
+              <h3 class="text-xl text-dark-green font-medium mb-4 flex items-center">
+                <i class="fas fa-award mr-2 animate-rotate-in"></i> My Expertise
+              </h3>
+              <div class="flex flex-wrap gap-3 mb-8">
+                <% (user.skills || []).forEach((skill, index) => { %>
+                  <span
+                    class="skill-badge bg-light-green text-dark-green px-4 py-2 rounded-full font-medium animate-bounce-in"
+                    style="animation-delay: <%= (index * 0.1).toFixed(1) %>s"
+                  >
+                    <%= skill.name || skill %>
+                  </span>
+                <% }) %>
+              </div>
+            </div>
+            <div class="delay-1000 animate-slide-up">
+              <div class="flex flex-wrap gap-3">
+                <a href="/" class="animated-btn bg-dark-green hover:bg-opacity-90 text-white px-6 py-3 rounded-full font-medium transition-all hover:shadow-lg transform hover:-translate-y-1 flex items-center">
+                  <i class="fas fa-home mr-2 animate-pulse-slow"></i> <span>Home</span>
+                </a>
+                <a href="/loadAbout" class="animated-btn border-2 border-dark-green text-dark-green hover:bg-light-green px-6 py-3 rounded-full font-medium transition-all hover:shadow-lg transform hover:-translate-y-1 flex items-center">
+                  <i class="fas fa-user mr-2"></i> <span>About Me</span>
+                </a>
+                <a href="/loadProject" class="animated-btn border-2 border-dark-green text-dark-green hover:bg-light-green px-6 py-3 rounded-full font-medium transition-all hover:shadow-lg transform hover:-translate-y-1 flex items-center">
+                  <i class="fas fa-briefcase mr-2"></i> <span>Projects</span>
+                </a>
+                <a href="/loadContact" class="animated-btn border-2 border-dark-green text-dark-green hover:bg-light-green px-6 py-3 rounded-full font-medium transition-all hover:shadow-lg transform hover:-translate-y-1 flex items-center">
+                  <i class="fas fa-envelope mr-2"></i> <span>Contact</span>
+                </a>
+              </div>
+            </div>
+            <div class="mt-10 delay-1200 animate-slide-up">
+              <div class="flex space-x-6">
+                <% if (user.socialLinks?.linkedin) { %>
+                  <a href="<%= user.socialLinks.linkedin %>" class="social-icon text-medium-green hover:text-dark-green transition-colors">
+                    <i class="fab fa-linkedin text-2xl"></i>
+                  </a>
+                <% } %>
+                <% if (user.socialLinks?.github) { %>
+                  <a href="<%= user.socialLinks.github %>" class="social-icon text-medium-green hover:text-dark-green transition-colors">
+                    <i class="fab fa-github text-2xl"></i>
+                  </a>
+                <% } %>
+                <% if (user.socialLinks?.twitter) { %>
+                  <a href="<%= user.socialLinks.twitter %>" class="social-icon text-medium-green hover:text-dark-green transition-colors">
+                    <i class="fab fa-twitter text-2xl"></i>
+                  </a>
+                <% } %>
+                <% if (user.socialLinks?.instagram) { %>
+                  <a href="<%= user.socialLinks.instagram %>" class="social-icon text-medium-green hover:text-dark-green transition-colors">
+                    <i class="fab fa-instagram text-2xl"></i>
+                  </a>
+                <% } %>
+              </div>
+            </div>
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-light-green rounded-full opacity-50 animate-float-slow"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Stats Section -->
+    <div class="container mx-auto px-6 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="floating-card bg-white p-6 rounded-xl text-center animate-fade-in" style="animation-delay: 0.1s">
+          <div class="mb-4 text-dark-green">
+            <i class="fas fa-project-diagram text-4xl animate-pulse-slow"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-800 mb-1 counter" data-target="<%= user.stats?.projectsCompleted || 0 %>">0</h3>
+          <p class="text-medium-green">Projects Completed</p>
+        </div>
+        <div class="floating-card bg-white p-6 rounded-xl text-center animate-fade-in" style="animation-delay: 0.2s">
+          <div class="mb-4 text-dark-green">
+            <i class="fas fa-smile-beam text-4xl animate-pulse-slow"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-800 mb-1 counter" data-target="<%= user.stats?.happyClients || 0 %>">0</h3>
+          <p class="text-medium-green">Happy Clients</p>
+        </div>
+        <div class="floating-card bg-white p-6 rounded-xl text-center animate-fade-in" style="animation-delay: 0.3s">
+          <div class="mb-4 text-dark-green">
+            <i class="fas fa-clock text-4xl animate-pulse-slow"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-800 mb-1 counter" data-target="<%= user.stats?.yearsExperience || 0 %>">0</h3>
+          <p class="text-medium-green">Years Experience</p>
+        </div>
+        <div class="floating-card bg-white p-6 rounded-xl text-center animate-fade-in" style="animation-delay: 0.4s">
+          <div class="mb-4 text-dark-green">
+            <i class="fas fa-trophy text-4xl animate-pulse-slow"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-800 mb-1 counter" data-target="<%= user.stats?.awardsReceived || 0 %>">0</h3>
+          <p class="text-medium-green">Awards Received</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container mx-auto px-6 py-16">
+      <div class="bg-light-green rounded-3xl p-10 relative overflow-hidden animate-fade-in">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-medium-green bg-opacity-20 rounded-full animate-float-slow"></div>
+        <div class="absolute -bottom-16 -left-16 w-48 h-48 bg-medium-green bg-opacity-20 rounded-full animate-pulse-slow"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between">
+          <div class="mb-6 md:mb-0 md:mr-10 animate-slide-in-left">
+            <h2 class="text-3xl font-bold text-gray-800 mb-3">Ready to start your project?</h2>
+            <p class="text-gray-600">Let's collaborate and bring your ideas to life!</p>
+          </div>
+          <div class="animate-slide-in-right">
+            <a href="/loadContact" class="animated-btn bg-dark-green text-white px-8 py-4 rounded-full font-medium flex items-center">
+              <span>Get in Touch</span>
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-green text-white py-8 mt-16">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h3 class="text-xl font-bold"><%= user.name || 'Your Name' %></h3>
+            <p><%= user.professionalTitle || 'Professional Title' %></p>
+          </div>
+          <div class="flex space-x-6">
+            <% if (user.socialLinks?.linkedin) { %>
+              <a href="<%= user.socialLinks.linkedin %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-linkedin text-xl"></i>
+              </a>
+            <% } %>
+            <% if (user.socialLinks?.github) { %>
+              <a href="<%= user.socialLinks.github %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            <% } %>
+            <% if (user.socialLinks?.twitter) { %>
+              <a href="<%= user.socialLinks.twitter %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+            <% } %>
+            <% if (user.socialLinks?.instagram) { %>
+              <a href="<%= user.socialLinks.instagram %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-instagram text-xl"></i>
+              </a>
+            <% } %>
+          </div>
+        </div>
+        <div class="mt-6 text-center">
+          <p>© 2025 <%= user.name || 'Your Name' %>. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        try {
+          // Counter animation
+          const counters = document.querySelectorAll(".counter");
+          counters.forEach((counter) => {
+            const target = parseInt(counter.getAttribute("data-target")) || 0;
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const updateCounter = () => {
+              current += step;
+              const value = Math.floor(current);
+              counter.innerText = value;
+              if (value < target) {
+                requestAnimationFrame(updateCounter);
+              } else {
+                counter.innerText = target;
+              }
+            };
+
+            const observer = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    updateCounter();
+                    observer.unobserve(entry.target);
+                  }
+                });
+              },
+              { threshold: 0.5 }
+            );
+
+            observer.observe(counter);
+          });
+
+          // Reveal animations on scroll
+          const revealElements = document.querySelectorAll(".animate-fade-in, .animate-slide-up");
+          const scrollObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.style.opacity = "1";
+                  entry.target.style.transform = "translateY(0)";
+                  scrollObserver.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.1 }
+          );
+
+          revealElements.forEach((el) => {
+            scrollObserver.observe(el);
+          });
+        } catch (error) {
+          console.error("Error in animations:", error);
+        }
+      });
+    </script>
+  </body>
+</html>

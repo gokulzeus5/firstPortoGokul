@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Me - My Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "light-green": "#E6F7E9",
+              "medium-green": "#A5D6A7",
+              "dark-green": "#75C278",
+            },
+            animation: {
+              "fade-in": "fadeIn 1s ease-in-out",
+              "slide-up": "slideUp 0.7s ease-out",
+              "slide-in-right": "slideInRight 0.7s ease-out",
+              "slide-in-left": "slideInLeft 0.7s ease-out",
+              "bounce-slow": "bounce 3s infinite",
+              "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+              float: "float 5s ease-in-out infinite",
+              typing: "typing 3.5s steps(40, end)",
+              pop: "pop 0.5s ease-out",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(50px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              slideInRight: {
+                "0%": { transform: "translateX(50px)", opacity: "0" },
+                "100%": { transform: "translateX(0)", opacity: "1" },
+              },
+              slideInLeft: {
+                "0%": { transform: "translateX(-50px)", opacity: "0" },
+                "100%": { transform: "translateX(0)", opacity: "1" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-10px)" },
+              },
+              typing: {
+                "0%": { width: "0" },
+                "100%": { width: "100%" },
+              },
+              pop: {
+                "0%": { transform: "scale(0.95)", opacity: "0" },
+                "70%": { transform: "scale(1.05)" },
+                "100%": { transform: "scale(1)", opacity: "1" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      .bg-gradient {
+        background: linear-gradient(120deg, #e6f7e9, #a5d6a7, #e6f7e9);
+        background-size: 200% 200%;
+        animation: gradientBG 15s ease infinite;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #75c278;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        width: 100%;
+      }
+
+      .nav-link.active {
+        color: #75c278;
+        font-weight: 500;
+      }
+
+      .form-input {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .form-input:focus {
+        border-color: #75c278;
+        box-shadow: 0 0 0 3px rgba(117, 194, 120, 0.2);
+      }
+
+      .contact-icon {
+        transition: all 0.3s ease;
+      }
+
+      .contact-card:hover .contact-icon {
+        transform: scale(1.1);
+        color: #75c278;
+      }
+
+      .send-button {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .send-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.4s;
+        z-index: -1;
+      }
+
+      .send-button:hover::before {
+        left: 100%;
+      }
+
+      .success-message {
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: all 0.5s ease;
+      }
+
+      .success-message.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .map-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body class="bg-gradient min-h-screen">
+    <!-- Navigation -->
+   <nav class="bg-white bg-opacity-90 shadow-md py-4 sticky top-0 z-10 animate-slide-down">
+      <div class="container mx-auto px-6 flex flex-wrap items-center justify-between">
+        <a href="/" class="text-2xl font-bold text-dark-green"><%= user.name || 'Your Name' %></a>
+        <div class="flex space-x-6">
+          <a href="/" class="nav-link text-gray-700 hover:text-dark-green ">Home</a>
+          <a href="/loadAbout" class="nav-link text-gray-700 hover:text-dark-green">About</a>
+          <a href="/loadProject" class="nav-link text-gray-700 hover:text-dark-green">Projects</a>
+          <a href="/loadContact" class="nav-link text-gray-700 hover:text-dark-green active">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-12">
+      <!-- Contact Heading -->
+      <div class="text-center mb-16 animate-fade-in">
+        <h1 class="text-4xl font-bold text-dark-green mb-4">Get In Touch</h1>
+        <div class="w-24 h-1 bg-medium-green mx-auto"></div>
+        <p class="mt-6 text-gray-600 max-w-2xl mx-auto">
+          Have a question or want to work together? Feel free to reach out using
+          the contact form below or through any of my social channels.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Contact Information Cards -->
+        <div class="lg:col-span-1 space-y-6 animate-slide-in-left">
+          <div class="bg-white rounded-xl shadow-lg p-6 contact-card">
+            <div class="flex items-start">
+              <div class="mr-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center"
+                >
+                  <i
+                    class="fas fa-envelope text-dark-green text-xl contact-icon"
+                  ></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">Email</h3>
+                <p class="text-medium-green">gokulzeus837@gmail.com</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6 contact-card">
+            <div class="flex items-start">
+              <div class="mr-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center"
+                >
+                  <i
+                    class="fas fa-phone-alt text-dark-green text-xl contact-icon"
+                  ></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">Phone</h3>
+                <p class="text-medium-green">9074665578</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6 contact-card">
+            <div class="flex items-start">
+              <div class="mr-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-light-green flex items-center justify-center"
+                >
+                  <i
+                    class="fas fa-map-marker-alt text-dark-green text-xl contact-icon"
+                  ></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">
+                  Location
+                </h3>
+                <p class="text-medium-green">Kerala</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">
+              Connect With Me
+            </h3>
+           <div class="flex space-x-5">
+  <% if (user.socialLinks?.linkedin) { %>
+    <a
+      href="<%= user.socialLinks.linkedin %>"
+      class="w-10 h-10 rounded-full bg-light-green flex items-center justify-center hover:bg-dark-green hover:text-white transition-all"
+    >
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+  <% } %>
+
+  <% if (user.socialLinks?.github) { %>
+    <a
+      href="<%= user.socialLinks.github %>"
+      class="w-10 h-10 rounded-full bg-light-green flex items-center justify-center hover:bg-dark-green hover:text-white transition-all"
+    >
+      <i class="fab fa-github"></i>
+    </a>
+  <% } %>
+
+  <% if (user.socialLinks?.twitter) { %>
+    <a
+      href="<%= user.socialLinks.twitter %>"
+      class="w-10 h-10 rounded-full bg-light-green flex items-center justify-center hover:bg-dark-green hover:text-white transition-all"
+    >
+      <i class="fab fa-twitter"></i>
+    </a>
+  <% } %>
+
+  <% if (user.socialLinks?.instagram) { %>
+    <a
+      href="<%= user.socialLinks.instagram %>"
+      class="w-10 h-10 rounded-full bg-light-green flex items-center justify-center hover:bg-dark-green hover:text-white transition-all"
+    >
+      <i class="fab fa-instagram"></i>
+    </a>
+  <% } %>
+</div>
+
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="lg:col-span-2 animate-slide-in-right">
+          <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-dark-green mb-6">
+              Send Me a Message
+            </h2>
+
+            <form id="contact-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="name" class="block text-gray-700 font-medium mb-2"
+                    >Name</label
+                  >
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    class="form-input w-full px-4 py-3 rounded-lg bg-gray-50 focus:outline-none"
+                    placeholder="Your Name"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="email"
+                    class="block text-gray-700 font-medium mb-2"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="form-input w-full px-4 py-3 rounded-lg bg-gray-50 focus:outline-none"
+                    placeholder="Your Email"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  for="subject"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Subject</label
+                >
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  required
+                  class="form-input w-full px-4 py-3 rounded-lg bg-gray-50 focus:outline-none"
+                  placeholder="Message Subject"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="message"
+                  class="block text-gray-700 font-medium mb-2"
+                  >Message</label
+                >
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  required
+                  class="form-input w-full px-4 py-3 rounded-lg bg-gray-50 focus:outline-none resize-none"
+                  placeholder="Your Message"
+                ></textarea>
+              </div>
+              <div>
+  <label for="location" class="block text-gray-700 font-medium mb-2">Location (Optional)</label>
+  <input
+    type="text"
+    id="location"
+    name="location"
+    class="form-input w-full px-4 py-3 rounded-lg bg-gray-50 focus:outline-none"
+    placeholder="Your Location"
+  />
+</div>
+
+
+              <div>
+                <button
+                  type="submit"
+                  class="send-button w-full bg-dark-green text-white font-medium py-3 px-6 rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center"
+                >
+                  <span>Send Message</span>
+                  <i class="fas fa-paper-plane ml-2"></i>
+                </button>
+              </div>
+            </form>
+
+            <!-- Success Message (hidden by default) -->
+            <div
+              id="success-message"
+              class="mt-6 bg-light-green text-dark-green px-4 py-3 rounded-lg hidden success-message"
+            >
+              <div class="flex items-center">
+                <div class="mr-3">
+                  <i class="fas fa-check-circle text-2xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-medium">Message Sent Successfully!</h4>
+                  <p class="text-sm">
+                    Thank you for reaching out. I'll get back to you shortly.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+         
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-green text-white py-8 mt-16">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <h3 class="text-xl font-bold"><%= user.name || 'Your Name' %></h3>
+            <p><%= user.professionalTitle || 'Professional Title' %></p>
+          </div>
+          <div class="flex space-x-6">
+            <% if (user.socialLinks?.linkedin) { %>
+              <a href="<%= user.socialLinks.linkedin %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-linkedin text-xl"></i>
+              </a>
+            <% } %>
+            <% if (user.socialLinks?.github) { %>
+              <a href="<%= user.socialLinks.github %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+            <% } %>
+            <% if (user.socialLinks?.twitter) { %>
+              <a href="<%= user.socialLinks.twitter %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+            <% } %>
+            <% if (user.socialLinks?.instagram) { %>
+              <a href="<%= user.socialLinks.instagram %>" class="text-white hover:text-light-green transition-colors">
+                <i class="fab fa-instagram text-xl"></i>
+              </a>
+            <% } %>
+          </div>
+        </div>
+        <div class="mt-6 text-center">
+          <p>© 2025 <%= user.name || 'Your Name' %>. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const contactForm = document.getElementById("contact-form");
+        const successMessage = document.getElementById("success-message");
+
+        // Form submission handler
+        contactForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const subject = document.getElementById("subject").value;
+const message = document.getElementById("message").value;
+const location = document.getElementById("location").value;
+
+// Send to backend
+fetch('/send-email', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    name,
+    email,
+    subject,
+    message,
+    location
+  }),
+})
+.then(response => response.json())
+.then(data => {
+  if (data.success) {
+    showSuccessMessage();
+    contactForm.reset();
+  } else {
+    alert('There was an error sending your message. Please try again.');
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+  alert('There was an error sending your message. Please try again.');
+});
+
+          // For demonstration purposes, we'll just show the success message
+          setTimeout(() => {
+            showSuccessMessage();
+            contactForm.reset();
+          }, 1000);
+        });
+
+        function showSuccessMessage() {
+          successMessage.classList.remove("hidden");
+          successMessage.classList.add("show");
+
+          // Hide the message after 5 seconds
+          setTimeout(() => {
+            successMessage.classList.remove("show");
+            setTimeout(() => {
+              successMessage.classList.add("hidden");
+            }, 500);
+          }, 5000);
+        }
+      });
+
+
+      document.addEventListener("DOMContentLoaded", function () {
+  const contactForm = document.getElementById("contact-form");
+  const locationInput = document.getElementById("location");
+  const autoLocationBtn = document.getElementById("auto-location");
+  
+  // Auto-detect location
+  autoLocationBtn.addEventListener("click", function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          // You could use a reverse geocoding API here to get the address
+          // For simplicity, we're just using coordinates
+          locationInput.value = `${position.coords.latitude}, ${position.coords.longitude}`;
+        },
+        function(error) {
+          console.error("Error getting location:", error);
+          alert("Could not get your location. Please enter it manually.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser");
+    }
+  });
+  
+  // Rest of your form code...
+});
+    </script>
+  </body>
+</html>
