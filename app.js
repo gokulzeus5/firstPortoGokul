@@ -4,7 +4,7 @@ const path = require ('path');
 const MongoStore = require('connect-mongo')
 const session = require ('express-session');
 const connectDb = require('./config/db');
-const router = require('./routes/user/userRoutes')
+const router = require('./routes/user/userRoutes');
 const morgan = require ('morgan');
 const cors = require('cors');
 
@@ -33,16 +33,14 @@ app.use(
   })
 );
 
-
-app.use('/',router);
-
-
+app.use('/', router);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT,()=>{
-    console.log(`✅ Server running on http://localhost:${PORT}`);
-}
-)
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+});
+
 
 
 
